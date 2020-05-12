@@ -155,7 +155,7 @@ class ConvResnetBlock(nn.Module):
             nn.Conv2d(in_planes, out_planes, kernel_size=kernel_size,
                 stride=stride, padding=padding),
             norm_fn(out_planes)]
-        for i in xrange(1, num_layers):
+        for i in range(1, num_layers):
             self.deep += [
                 activation_fn,
                 nn.Conv2d(out_planes, out_planes, kernel_size=kernel_size,
@@ -213,7 +213,7 @@ class DeconvResnetBlock(nn.Module):
             nn.Conv2d(in_planes, out_planes, kernel_size=kernel_size,
                 stride=1, padding=padding),
             norm_fn(out_planes)]
-        for i in xrange(num_layers-1):
+        for i in range(num_layers-1):
             self.deep += [
                 activation_fn,
                 nn.Conv2d(out_planes, out_planes, kernel_size=kernel_size,
@@ -241,7 +241,7 @@ class DeconvResnetBlock(nn.Module):
                     stride=stride, padding=padding, output_padding=output_padding),
                 norm_fn(out_planes)]
         #
-        for i in xrange(num_layers-1):
+        for i in range(num_layers-1):
             padding = int(kernel_size/2)
             self.deep += [
                 activation_fn,
