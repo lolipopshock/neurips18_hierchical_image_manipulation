@@ -90,7 +90,7 @@ class MaskTwoStreamConvSwitch_NET(MaskContextAE_NET):
                         norm_fn=self.norm_fn,
                         activation_fn=activation_fn))
 
-        self.latent_dim = output_dim
+        self.latent_dim = int(output_dim)
         return nn.Sequential(*layers)
 
     def get_latent_encoder(self):
@@ -131,7 +131,7 @@ class MaskTwoStreamConvSwitch_NET(MaskContextAE_NET):
     def get_conv_decoder(self, output_nc, skip_layers=None):
         activation_fn = nn.ReLU(True)
         output_dim = self.latent_dim
-        
+        output_nc = int(output_nc)
         layers = []
         for i in range(self.num_layers+1):
             input_dim = output_dim
@@ -153,7 +153,7 @@ class MaskTwoStreamConvSwitch_NET(MaskContextAE_NET):
                         norm_fn=self.norm_fn,
                         activation_fn=activation_fn))
         layers.append(
-                nn.Conv2d(output_dim, output_nc, kernel_size=3, padding=1, stride=1))
+                nn.Conv2d(int(output_dim), int(output_nc), kernel_size=3, padding=1, stride=1))
 
         return nn.Sequential(*layers)
 
