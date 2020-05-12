@@ -63,13 +63,13 @@ class MaskContextAE_NET(nn.Module):
             params_dict = self.params_dict
         assert params_dict
         trainable_parameters = []
-        for _, v in params_dict.iteritems():
+        for _, v in params_dict.items():
             trainable_parameters += list(v.parameters())
         return trainable_parameters
 
     def cudafy(self, gpu_id):
         # move your model to gpu
-        for _, v in self.params_dict.iteritems():
+        for _, v in self.params_dict.items():
             v.cuda(gpu_id)
 
     def get_conv_encoder(self):
@@ -88,7 +88,7 @@ class MaskContextAE_NET(nn.Module):
                 self.norm_fn(self.conv_dim)]
         curr_module = nn.Sequential(*curr_module)
         conv_modules.append(curr_module)
-        for i in xrange(self.num_layers):
+        for i in range(self.num_layers):
             if i >= 3:
                 input_dim = (2**3) * self.conv_dim
                 output_dim = input_dim
@@ -108,7 +108,7 @@ class MaskContextAE_NET(nn.Module):
     def get_conv_decoder(self):
         conv_modules = []
         activation_fn = nn.ReLU(True)
-        for i in xrange(self.num_layers):
+        for i in range(self.num_layers):
             if self.num_layers - i >= 4:
               input_dim = (2**3) * self.conv_dim
               output_dim = input_dim
@@ -198,12 +198,12 @@ class MaskContextAE_NET(nn.Module):
         ########################################### 
         enc_features = []
         img_feat = input_var
-        for i in xrange(self.num_layers+1):
+        for i in range(self.num_layers+1):
           img_feat = conv_encoder_modules[i](img_feat)
           enc_features.append(img_feat)
         latent_feat = latent_encoder(img_feat)
         dec_feat = latent_decoder(latent_feat)
-        for i in xrange(self.num_layers+1):
+        for i in range(self.num_layers+1):
           use_skip = (self.skip_start <= i) and (i <= self.skip_end)
           if not use_skip:
               dec_feat = conv_decoder_modules[i](dec_feat)
@@ -222,10 +222,10 @@ class MaskContextAE_NET(nn.Module):
  
     def set_mode(self, eval_mode=1):
         if eval_mode:
-            for _, v in self.params_dict.iteritems():
+            for _, v in self.params_dict.items():
                 v.eval()
             self.eval_mode = 1
         else:
-            for _, v in self.params_dict.iteritems():
+            for _, v in self.params_dict.items():
                 v.train() 
             self.eval_mode = 0
