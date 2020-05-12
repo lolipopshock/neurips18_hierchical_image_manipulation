@@ -115,7 +115,13 @@ def paste_canvas(original, cropped, info_dict, method=Image.NEAREST,
         recon = pil2tensor(recon, is_img) # convert back to Tensor
 
     raw = original.clone()
-    raw[0,:,y1:y2+1,x1:x2+1] = recon[:,:,:]
+
+    (target_height, target_width) = raw[0,:,y1:y2+1,x1:x2+1].shape[1:3]
+    if (target_height, target_width) != recon.shape[1:3]:
+        raw[0,:,y1:y2+1,x1:x2+1] = recon[:,:target_height,:target_width]
+        print((target_height, target_width), recon.shape[1:3])
+    else:
+        raw[0,:,y1:y2+1,x1:x2+1] = recon[:,:,:]
 
     return raw
 

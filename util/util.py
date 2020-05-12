@@ -9,8 +9,8 @@ import re
 
 try:
     from StringIO import StringIO
-except:
-    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 import shutil
 import numpy as np
 
@@ -101,10 +101,12 @@ def tensor2label(label_tensor, n_label, imtype=np.uint8):
 # Converts a label map into a PIL Image
 def tensor2pil(tensor, is_img=False):
     trans_fn = transforms.Compose([transforms.ToPILImage()])
+    print(tensor.shape)
     if not is_img:
         return trans_fn(tensor / 255.0)
     else:
         return trans_fn(tensor)
+
 
 # Converts a PIL Image into a label map
 def pil2tensor(pil_image, is_img=False):
