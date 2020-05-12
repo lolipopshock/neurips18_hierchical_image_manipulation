@@ -131,6 +131,9 @@ class ConvResnetBlock(nn.Module):
         super(ConvResnetBlock, self).__init__()
         assert norm_fn
         assert activation_fn
+
+        in_planes, out_planes = int(in_planes), int(out_planes)
+        kernel_size = int(kernel_size)
         ###############################
         ## Build Shortcut connection ##
         ###############################
@@ -183,8 +186,8 @@ class DeconvResnetBlock(nn.Module):
             self.shortcut = []
             if in_planes != out_planes:
                 self.shortcut += [
-                    nn.Conv2d(in_planes, out_planes, kernel_size=1),
-                    norm_fn(out_planes)]
+                    nn.Conv2d(int(in_planes), int(out_planes), kernel_size=1),
+                    norm_fn(int(out_planes))]
             if stride > 1:
                 self.shortcut += [nn.Upsample(scale_factor=stride, mode='bilinear')]
             self.shortcut = nn.Sequential(*self.shortcut)
@@ -219,6 +222,8 @@ class DeconvResnetBlock(nn.Module):
 
     def build_tconv2d_block(self, in_planes, out_planes, num_layers, stride,
                             kernel_size, norm_fn, activation_fn):
+        in_planes, out_planes = int(in_planes), int(out_planes)
+        
         if stride == 1:
             padding = int(kernel_size/2)
             output_padding = stride
@@ -253,6 +258,7 @@ class DeconvResnetBlock(nn.Module):
         return out
 
 def conv3x3(in_planes, out_planes, stride=1, padding=1, dilation=1):
+    in_planes, out_planes = int(in_planes), int(out_planes)
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
                      padding=padding, bias=False, dilation=dilation)
 
