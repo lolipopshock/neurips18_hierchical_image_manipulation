@@ -5,21 +5,34 @@ from PIL import Image
 import json
 import numpy as np
 
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NpEncoder, self).default(obj)
+
 def copy_file(src, src_ext, dst):
     # find all files ends up with ext
     flist = sorted(glob.glob(os.path.join(src, '*', src_ext)))
     for fname in flist:
-        src_path = os.path.join(src, fname)
-        copy2(src_path, dst)
-        print('copied %s to %s' % (src_path, dst))
+        # src_path = os.path.join(src, fname)
+        copy2(fname, dst)
+        print('copied %s to %s' % (fname, dst))
 
 def construct_box(inst_root, inst_name, cls_name, dst):
     inst_list = sorted(glob.glob(os.path.join(inst_root, '*', inst_name)))
     cls_list = sorted(glob.glob(os.path.join(inst_root, '*', cls_name)))
     for inst, cls in zip(*(inst_list, cls_list)):
-        inst_map = Image.open(os.path.join(inst_root, inst))
+        # inst_map = Image.open(os.path.join(inst_root, inst))
+        inst_map = Image.open(inst)
         inst_map = np.array(inst_map, dtype=np.int32)
-        cls_map = Image.open(os.path.join(inst_root, cls))
+        # cls_map = Image.open(os.path.join(inst_root, cls))
+        cls_map = Image.open(cls)
         cls_map = np.array(cls_map, dtype=np.int32)
         H, W = inst_map.shape
         # get a list of unique instances
@@ -37,7 +50,7 @@ def construct_box(inst_root, inst_name, cls_name, dst):
         filename = os.path.splitext(os.path.basename(inst))[0]
         savename = os.path.join(dst, filename + '.json')
         with open(savename, 'w') as f:
-            json.dump(inst_info, f)
+            json.dump(inst_info, f, cls=NpEncoder)
         print('wrote a bbox summary of %s to %s' % (inst, savename))
 
 # organize image
