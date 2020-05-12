@@ -48,7 +48,7 @@ class JointInference():
             return np.random.choice(candidate_list)
         else:
             # Random sample
-            return np.random.choice(bbox_originals)
+            return np.random.choice(list(bbox_originals))
 
     def sample_window(self, img, label, bbox_sampled):
         pass
