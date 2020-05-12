@@ -10,6 +10,9 @@ def CreateDataset(opt):
     elif opt.dataloader == 'ade20k':
         from data.ade20k_dataset import ADE20KDataset
         dataset = ADE20KDataset()
+    elif opt.dataloader == 'stamp':
+        from data.stamp_dataset import StampDataset
+        dataset = StampDataset()
 
     print("dataset [%s] was created" % (dataset.name()))
     dataset.initialize(opt)
