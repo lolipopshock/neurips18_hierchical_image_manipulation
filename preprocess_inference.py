@@ -34,9 +34,9 @@ def parse_box(box_image):
 
 
 parser = argparse.ArgumentParser(description='List the content of a folder')
-parser.add_argument('--subset_name', default='giraffe',      help='original cityscapes dataset path', type=str)
-parser.add_argument('--base_background_path', default='./datasets/inference/background',  help='save path for new cityscape dataset', type=str)
-parser.add_argument('--base_box_path', default='./datasets/inference/box',  help='save path for new cityscape dataset', type=str)
+parser.add_argument('--subset_name',          default='giraffe', type=str)
+parser.add_argument('--base_background_path', default='./datasets/inference/background', type=str)
+parser.add_argument('--base_box_path',        default='./datasets/inference/box',  type=str)
 
 if __name__ == "__main__":
     
