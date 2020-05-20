@@ -27,6 +27,8 @@ parser.add_argument('--gpu_ids', type=int,
 parser.add_argument('--how_many', type=int,
         default=50,
         help='number of examples to visualize')
+parser.add_argument('--base_name', type=str)
+
 joint_opt = parser.parse_args()
 
 joint_opt.gpu_ids = [joint_opt.gpu_ids]
@@ -45,7 +47,7 @@ data_loader = SegmentationDataset()
 data_loader.initialize(opt_maskgen)
 visualizer = Visualizer(opt_maskgen)
 # create website
-base_name = 'giraffe_run'
+base_name = joint_opt.base_name #'giraffe_run'
 web_dir = os.path.join('./results', base_name, 'val')
 
 webpage = html.HTML(web_dir, 'Experiment = %s, Phase = %s' %
