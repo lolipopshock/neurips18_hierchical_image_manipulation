@@ -51,8 +51,8 @@ if __name__ == "__main__":
     cur_background_path = f'{base_background_path}/{subset_name}'
     cur_box_path = f'{base_box_path}/{subset_name}'
 
-    output_run_path = f'{base_path_train}_runx'   # Run for comparing many examples and generat KID/FID Scores
-    output_show_path = f'{base_path_train}_showx' # Show for examples in the paper 
+    output_run_path = f'{base_path_train}_run'   # Run for comparing many examples and generat KID/FID Scores
+    output_show_path = f'{base_path_train}_show' # Show for examples in the paper 
 
     for name in ['img','label','inst','bbox']:
         cur_path = os.path.join(output_run_path, f'val_{name}')
