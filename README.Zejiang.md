@@ -54,7 +54,20 @@ Ane the original COCO dataset could be put into other directory, and you can spe
     ```
     By default, they will use the data in `datasets/stamp_<category_name>_run`, which is a path contains data specifically used for testing. You may also need to generate the data following step1. 
 
+## Running Inference 
+
+1. Organize the inference data according and save it inside the `datasets/inference` folder. 
+
+2. Run the inference preprocessing script: 
+    ```
+    python preprocess_inference.py
+    ```
+
+3. Add `_show` or `_run` to input paths inside the `test` scripts. For example, `--dataroot datasets/stamp_giraffe_run/` in the `scripts/test_pretrained_box2mask_stamp.sh` and `scripts/test_pretrained_mask2image_stamp.sh` file. 
+
 4. Run the scripts for joint_inference_model: 
     ```
     bash scripts/test_joint_inference_stamp.sh
     ```
+
+5. You can find the result folder inside the current directory, e.g., `giraffe_run` or `giraffe_show`. 
