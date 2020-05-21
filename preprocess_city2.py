@@ -88,7 +88,7 @@ def save_one_sample(target_paths, image_name, anno_idx,
     Image.fromarray(cur_inst_map).save(target)
 
     target = os.path.join(target_paths['label'], f'{image_name}-{anno_idx}.png')
-    Image.fromarray(cur_label_map).save(target)
+    Image.fromarray(cur_label_map.astype('uint8')).save(target)
     
     # Save the json bbox file
     target = os.path.join(target_paths['bbox'], f'{image_name}-{anno_idx}.json')
@@ -100,7 +100,7 @@ def save_one_sample(target_paths, image_name, anno_idx,
 
 parser = argparse.ArgumentParser(description='List the content of a folder')
 parser.add_argument('--source_path', default='datasets/cityscape',      help='original cityscapes dataset path', type=str)
-parser.add_argument('--target_path', default='datasets/cityscape_new',  help='save path for new cityscape dataset', type=str)
+parser.add_argument('--target_path', default='datasets/cityscape_new2',  help='save path for new cityscape dataset', type=str)
 
 # organize image
 if __name__ == '__main__':
