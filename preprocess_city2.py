@@ -34,7 +34,7 @@ def construct_single_class_dataset(image_source_path, anno_source_path, target_p
                                     basename(x).\
                                     replace('_leftImg8bit.png', ''), image_paths))
     
-    for image_name, image_path in zip(image_names, image_paths):
+    for image_name, image_path in zip(image_names[:50], image_paths):
         # Obtain the label and inst
         label_path = glob.glob(anno_source_path + '/*/' + image_name + '*_labelIds.png')[0]
         inst_path  = glob.glob(anno_source_path + '/*/' + image_name + '*_instanceIds.png')[0]
@@ -51,24 +51,29 @@ def construct_single_class_dataset(image_source_path, anno_source_path, target_p
             if int(iid)//1000 != target_cls: # filter out non-instance masks
                 continue
             
+            mask = inst_map==iid
+
             # Get the current map 
-            cur_inst_map = inst_map * (inst_map==iid)
-            cur_label_map = label_map * (inst_map==iid)
+            cur_inst_map = inst_map * (mask)
+            cur_label_map = label_map * (mask)
 
             # Get info for the current map
-            ys,xs = np.where(inst_map==iid)
+            ys,xs = np.where(mask)
             ymin, ymax, xmin, xmax = \
                     ys.min(), ys.max(), xs.min(), xs.max()
-            cls_label = np.median(label_map[inst_map==iid])
+            cls_label = np.median(label_map[mask])
 
             # If the majority of the region is for another class, then drop this mask
             if cls_label != target_cls: continue
             
+            # If the region is so small we also drop it 
+            if mask.sum() < 800: continue
+
             # Construct the label information
             object_info = {'bbox': [xmin, ymin, xmax, ymax], 'cls':target_cls}
             inst_info = {'imgHeight':H, 
                          'imgWidth':W, 
-                         'objects':{str(iid): object_info}}
+                         'objects':{str(24000): object_info}}
             
             save_one_sample(target_paths, image_name, anno_idx, 
                 image_path, cur_inst_map, cur_label_map, inst_info)
@@ -81,7 +86,7 @@ def save_one_sample(target_paths, image_name, anno_idx,
     # Copy image file and rename 
     source = image_path
     target = os.path.join(target_paths['img'], f'{image_name}-{anno_idx}.png')
-    shutil.copyfile(source, target) 
+    os.symlink(source, target) 
 
     # Save the label and inst map
     target = os.path.join(target_paths['inst'], f'{image_name}-{anno_idx}.png')
