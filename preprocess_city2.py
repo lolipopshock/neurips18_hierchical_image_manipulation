@@ -34,7 +34,7 @@ def construct_single_class_dataset(image_source_path, anno_source_path, target_p
                                     basename(x).\
                                     replace('_leftImg8bit.png', ''), image_paths))
     
-    for image_name, image_path in zip(image_names[:50], image_paths):
+    for image_name, image_path in zip(image_names, image_paths):
         # Obtain the label and inst
         label_path = glob.glob(anno_source_path + '/*/' + image_name + '*_labelIds.png')[0]
         inst_path  = glob.glob(anno_source_path + '/*/' + image_name + '*_instanceIds.png')[0]
