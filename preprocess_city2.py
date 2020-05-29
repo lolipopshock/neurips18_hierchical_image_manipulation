@@ -86,7 +86,7 @@ def save_one_sample(target_paths, image_name, anno_idx,
     # Copy image file and rename 
     source = image_path
     target = os.path.join(target_paths['img'], f'{image_name}-{anno_idx}.png')
-    os.symlink(source, target) 
+    os.symlink(os.path.abspath(source), target) 
 
     # Save the label and inst map
     target = os.path.join(target_paths['inst'], f'{image_name}-{anno_idx}.png')
